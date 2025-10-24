@@ -105,7 +105,7 @@
     async function loadRsvps(){
       tblBody.innerHTML = '';
       try {
-        const q = query(collection(db, 'confirmacoes'), orderBy('confirmadoEm', 'desc'));
+        const q = query(collection(db, 'rsvps'), orderBy('confirmadoEm', 'desc'));
         const snap = await getDocs(q);
         if (snap.empty) {
           tblBody.innerHTML = '<tr><td colspan="2">Nenhuma confirmação ainda.</td></tr>';
@@ -129,3 +129,4 @@
   </script>
 </body>
 </html>
+
