@@ -1,132 +1,177 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Painel — Confirmados Sofia</title>
-  <style>
-    body{font-family:Arial,Helvetica,sans-serif;background:#fff7fb;color:#3a1028;margin:0;padding:20px}
-    .wrap{max-width:1000px;margin:0 auto}
-    header{display:flex;justify-content:space-between;align-items:center}
-    button{background:#8b1f3f;color:#fff;border:none;padding:8px 12px;border-radius:8px;cursor:pointer}
-    .login{margin-top:30px;padding:18px;background:#fff;border-radius:12px;box-shadow:0 8px 20px rgba(139,31,63,.05)}
-    input{padding:10px;border-radius:8px;border:1px solid #f0dce6;margin-right:10px}
-    table{width:100%;border-collapse:collapse;margin-top:16px}
-    th,td{padding:10px;border-bottom:1px solid #fde8f0;text-align:left}
-    td.time{color:#7a4453;font-size:13px}
-    .hidden{display:none}
-  </style>
-</head>
-<body>
-  <div class="wrap">
-    <header>
-      <h2>Painel de confirmações — Sofia 15 anos</h2>
-      <div id="userArea"></div>
-    </header>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Confirmação — 15 Anos da Sofia</title>
+    <style>
+      body {
+        font-family: "Poppins", Arial, sans-serif;
+        background: linear-gradient(180deg, #f7a9c4 0%, #fcd2e3 100%);
+        margin: 0;
+        padding: 0;
+        color: #3a1028;
+      }
 
-    <div id="loginArea" class="login">
-      <p>Entre com a sua conta de organizador (crie o usuário no Firebase Console - Authentication → Email/Password).</p>
-      <input type="email" id="email" placeholder="seu@email.com" />
-      <input type="password" id="pwd" placeholder="senha" />
-      <button id="btnLogin">Entrar</button>
-      <div id="loginMsg" style="margin-top:8px;color:#8b1f3f"></div>
+      .container {
+        max-width: 420px;
+        margin: 60px auto;
+        background: #fff;
+        padding: 28px;
+        border-radius: 18px;
+        box-shadow: 0 10px 25px rgba(139, 31, 63, 0.15);
+        text-align: center;
+      }
+
+      h1 {
+        font-size: 1.9em;
+        color: #8b1f3f;
+        margin-bottom: 8px;
+      }
+
+      p {
+        margin: 6px 0 20px;
+      }
+
+      input {
+        width: 100%;
+        padding: 12px;
+        border-radius: 10px;
+        border: 1px solid #f0dce6;
+        margin-bottom: 12px;
+        font-size: 15px;
+      }
+
+      button {
+        background: #8b1f3f;
+        color: #fff;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 10px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.3s;
+        width: 100%;
+      }
+
+      button:hover {
+        background: #a32c54;
+      }
+
+      .msg {
+        margin-top: 16px;
+        font-weight: 500;
+        color: #8b1f3f;
+      }
+
+      .share {
+        margin-top: 24px;
+        background: #25d366;
+        border: none;
+        color: white;
+        padding: 10px 16px;
+        border-radius: 10px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-block;
+      }
+
+      footer {
+        text-align: center;
+        margin-top: 40px;
+        color: #7a4453;
+        font-size: 13px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Confirme sua presença</h1>
+      <p>para os 15 anos da <strong>Sofia</strong> 💖</p>
+
+      <input type="text" id="nome" placeholder="Seu nome completo" required />
+      <input
+        type="number"
+        id="assentos"
+        placeholder="Quantos assentos vai precisar?"
+        min="1"
+        required
+      />
+
+      <button id="confirmar">Confirmar presença</button>
+
+      <div class="msg" id="msg"></div>
+
+      <a
+        href="#"
+        id="whatsappLink"
+        class="share"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Compartilhar no WhatsApp 💌
+      </a>
     </div>
 
-    <div id="content" class="hidden">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <div><strong id="userEmail"></strong></div>
-        <div>
-          <button id="btnRefresh">Atualizar</button>
-          <button id="btnLogout">Sair</button>
-        </div>
-      </div>
+    <footer>Com carinho, Sofia 💕</footer>
 
-      <h3 style="margin-top:14px">Confirmados</h3>
-      <table id="tbl"><thead><tr><th>Nome</th><th>Data/Hora</th></tr></thead><tbody></tbody></table>
-    </div>
-  </div>
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+      import {
+        getFirestore,
+        collection,
+        addDoc,
+        serverTimestamp,
+      } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
-    import { getFirestore, collection, query, orderBy, getDocs, Timestamp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
+      const firebaseConfig = {
+        apiKey: "AIzaSyDmNGSKt_f_R0wIeTnS-51hVvGIXe_pjTw",
+        authDomain: "sofia-15-anos-37213.firebaseapp.com",
+        projectId: "sofia-15-anos-37213",
+        storageBucket: "sofia-15-anos-37213.firebasestorage.app",
+        messagingSenderId: "793990977775",
+        appId: "1:793990977775:web:a96dcbca03fb0fa466231a",
+      };
 
-    // === MESMA CONFIG DO INDEX.HTML ===
-    const firebaseConfig = {
-      apiKey: "AIzaSyDmNGSKt_f_R0wIeTnS-51hVvGIXe_pjTw",
-      authDomain: "sofia-15-anos-37213.firebaseapp.com",
-      projectId: "sofia-15-anos-37213",
-      storageBucket: "sofia-15-anos-37213.firebasestorage.app",
-      messagingSenderId: "793990977775",
-      appId: "1:793990977775:web:a96dcbca03fb0fa466231a"
-    };
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+      const btn = document.getElementById("confirmar");
+      const msg = document.getElementById("msg");
+      const nomeInput = document.getElementById("nome");
+      const assentosInput = document.getElementById("assentos");
+      const whatsappLink = document.getElementById("whatsappLink");
 
-    const loginArea = document.getElementById('loginArea');
-    const content = document.getElementById('content');
-    const userArea = document.getElementById('userArea');
-    const tblBody = document.querySelector('#tbl tbody');
-    const userEmail = document.getElementById('userEmail');
-    const loginMsg = document.getElementById('loginMsg');
+      btn.addEventListener("click", async () => {
+        const nome = nomeInput.value.trim();
+        const assentos = assentosInput.value.trim();
 
-    onAuthStateChanged(auth, user => {
-      if (user) {
-        loginArea.classList.add('hidden');
-        content.classList.remove('hidden');
-        userArea.textContent = user.email;
-        userEmail.textContent = user.email;
-        loadRsvps();
-      } else {
-        loginArea.classList.remove('hidden');
-        content.classList.add('hidden');
-        userArea.textContent = '';
-        userEmail.textContent = '';
-      }
-    });
-
-    document.getElementById('btnLogin').addEventListener('click', async () => {
-      const email = document.getElementById('email').value;
-      const pwd = document.getElementById('pwd').value;
-      loginMsg.textContent = '';
-      try {
-        await signInWithEmailAndPassword(auth, email, pwd);
-      } catch (e) {
-        console.error(e);
-        loginMsg.textContent = 'Erro no login. Verifique usuário/senha.';
-      }
-    });
-
-    document.getElementById('btnLogout').addEventListener('click', () => signOut(auth));
-    document.getElementById('btnRefresh').addEventListener('click', loadRsvps);
-
-    async function loadRsvps(){
-      tblBody.innerHTML = '';
-      try {
-        const q = query(collection(db, 'rsvps'), orderBy('confirmadoEm', 'desc'));
-        const snap = await getDocs(q);
-        if (snap.empty) {
-          tblBody.innerHTML = '<tr><td colspan="2">Nenhuma confirmação ainda.</td></tr>';
+        if (!nome || !assentos) {
+          msg.textContent = "Por favor, preencha seu nome e a quantidade de assentos.";
           return;
         }
-        snap.forEach(doc => {
-          const data = doc.data();
-          const tr = document.createElement('tr');
-          const when = data.confirmadoEm ? data.confirmadoEm.toDate().toLocaleString() : '-';
-          tr.innerHTML = `<td>${escapeHtml(data.nome || data.name || '')}</td><td class="time">${escapeHtml(when)}</td>`;
-          tblBody.appendChild(tr);
-        });
-      } catch (e) {
-        console.error(e);
-      }
-    }
 
-    function escapeHtml(str){
-      return String(str).replace(/[&<>"']/g, s=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[s]));
-    }
-  </script>
-</body>
+        try {
+          await addDoc(collection(db, "rsvps"), {
+            nome,
+            assentos: parseInt(assentos),
+            confirmadoEm: serverTimestamp(),
+          });
+
+          msg.textContent = `Presença confirmada! Obrigada 💕`;
+          nomeInput.value = "";
+          assentosInput.value = "";
+
+          const texto = encodeURIComponent(
+            `Confirmei presença para os 15 anos da Sofia 💖\n\nNome: ${nome}\nAssentos: ${assentos}\n\nVenha também!`
+          );
+          whatsappLink.href = `https://wa.me/?text=${texto}`;
+        } catch (e) {
+          console.error(e);
+          msg.textContent = "Erro ao confirmar. Tente novamente.";
+        }
+      });
+    </script>
+  </body>
 </html>
-
