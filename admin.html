@@ -1,177 +1,245 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Confirmação — 15 Anos da Sofia</title>
-    <style>
-      body {
-        font-family: "Poppins", Arial, sans-serif;
-        background: linear-gradient(180deg, #f7a9c4 0%, #fcd2e3 100%);
-        margin: 0;
-        padding: 0;
-        color: #3a1028;
-      }
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Painel — Confirmados Sofia</title>
+  <style>
+    body {
+      font-family: "Poppins", Arial, sans-serif;
+      background: linear-gradient(180deg, #f7a9c6 0%, #f6c0d9 100%);
+      color: #3a1028;
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+    }
 
-      .container {
-        max-width: 420px;
-        margin: 60px auto;
-        background: #fff;
-        padding: 28px;
-        border-radius: 18px;
-        box-shadow: 0 10px 25px rgba(139, 31, 63, 0.15);
-        text-align: center;
-      }
+    .wrap {
+      max-width: 1000px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 8px 25px rgba(139, 31, 63, 0.1);
+    }
 
-      h1 {
-        font-size: 1.9em;
-        color: #8b1f3f;
-        margin-bottom: 8px;
-      }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
 
-      p {
-        margin: 6px 0 20px;
-      }
+    h2 {
+      color: #8b1f3f;
+      margin: 0;
+    }
 
-      input {
-        width: 100%;
-        padding: 12px;
-        border-radius: 10px;
-        border: 1px solid #f0dce6;
-        margin-bottom: 12px;
-        font-size: 15px;
-      }
+    button {
+      background: #8b1f3f;
+      color: #fff;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s;
+      font-weight: 500;
+    }
 
-      button {
-        background: #8b1f3f;
-        color: #fff;
-        border: none;
-        padding: 12px 20px;
-        border-radius: 10px;
-        font-size: 16px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: background 0.3s;
-        width: 100%;
-      }
+    button:hover {
+      background: #a32c54;
+    }
 
-      button:hover {
-        background: #a32c54;
-      }
+    .login {
+      margin-top: 30px;
+      padding: 18px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(139, 31, 63, 0.05);
+    }
 
-      .msg {
-        margin-top: 16px;
-        font-weight: 500;
-        color: #8b1f3f;
-      }
+    input {
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #f0dce6;
+      margin-right: 10px;
+    }
 
-      .share {
-        margin-top: 24px;
-        background: #25d366;
-        border: none;
-        color: white;
-        padding: 10px 16px;
-        border-radius: 10px;
-        font-weight: 600;
-        text-decoration: none;
-        display: inline-block;
-      }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+    }
 
-      footer {
-        text-align: center;
-        margin-top: 40px;
-        color: #7a4453;
-        font-size: 13px;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <h1>Confirme sua presença</h1>
-      <p>para os 15 anos da <strong>Sofia</strong> 💖</p>
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid #fde8f0;
+      text-align: left;
+    }
 
-      <input type="text" id="nome" placeholder="Seu nome completo" required />
-      <input
-        type="number"
-        id="assentos"
-        placeholder="Quantos assentos vai precisar?"
-        min="1"
-        required
-      />
+    th {
+      background: #fff2f7;
+      color: #8b1f3f;
+      font-weight: 600;
+    }
 
-      <button id="confirmar">Confirmar presença</button>
+    td.time {
+      color: #7a4453;
+      font-size: 13px;
+    }
 
-      <div class="msg" id="msg"></div>
+    .hidden {
+      display: none;
+    }
 
-      <a
-        href="#"
-        id="whatsappLink"
-        class="share"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Compartilhar no WhatsApp 💌
-      </a>
+    #loginMsg {
+      margin-top: 8px;
+      color: #8b1f3f;
+    }
+
+    .total-assentos {
+      background: #ffe6f0;
+      color: #8b1f3f;
+      padding: 6px 14px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h2>Painel de confirmações — Sofia 15 anos</h2>
+      <div id="userArea"></div>
+    </header>
+
+    <div id="loginArea" class="login">
+      <p>Entre com a sua conta de organizador (criada no Firebase Authentication → Email/Senha).</p>
+      <input type="email" id="email" placeholder="seu@email.com" />
+      <input type="password" id="pwd" placeholder="senha" />
+      <button id="btnLogin">Entrar</button>
+      <div id="loginMsg"></div>
     </div>
 
-    <footer>Com carinho, Sofia 💕</footer>
+    <div id="content" class="hidden">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+        <strong id="userEmail"></strong>
+        <div>
+          <button id="btnRefresh">Atualizar</button>
+          <button id="btnLogout">Sair</button>
+        </div>
+      </div>
 
-    <script type="module">
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-      import {
-        getFirestore,
-        collection,
-        addDoc,
-        serverTimestamp,
-      } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
+      <h3 style="margin-top:14px;color:#8b1f3f;display:flex;align-items:center;gap:12px;">
+        Confirmados
+        <span id="totalAssentos" class="total-assentos">Total: 0 assentos</span>
+      </h3>
 
-      const firebaseConfig = {
-        apiKey: "AIzaSyDmNGSKt_f_R0wIeTnS-51hVvGIXe_pjTw",
-        authDomain: "sofia-15-anos-37213.firebaseapp.com",
-        projectId: "sofia-15-anos-37213",
-        storageBucket: "sofia-15-anos-37213.firebasestorage.app",
-        messagingSenderId: "793990977775",
-        appId: "1:793990977775:web:a96dcbca03fb0fa466231a",
-      };
+      <table id="tbl">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Assentos</th>
+            <th>Data/Hora</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
 
-      const app = initializeApp(firebaseConfig);
-      const db = getFirestore(app);
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
+    import { getFirestore, collection, query, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
 
-      const btn = document.getElementById("confirmar");
-      const msg = document.getElementById("msg");
-      const nomeInput = document.getElementById("nome");
-      const assentosInput = document.getElementById("assentos");
-      const whatsappLink = document.getElementById("whatsappLink");
+    // === CONFIG DO FIREBASE ===
+    const firebaseConfig = {
+      apiKey: "AIzaSyDmNGSKt_f_R0wIeTnS-51hVvGIXe_pjTw",
+      authDomain: "sofia-15-anos-37213.firebaseapp.com",
+      projectId: "sofia-15-anos-37213",
+      storageBucket: "sofia-15-anos-37213.firebasestorage.app",
+      messagingSenderId: "793990977775",
+      appId: "1:793990977775:web:a96dcbca03fb0fa466231a"
+    };
 
-      btn.addEventListener("click", async () => {
-        const nome = nomeInput.value.trim();
-        const assentos = assentosInput.value.trim();
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-        if (!nome || !assentos) {
-          msg.textContent = "Por favor, preencha seu nome e a quantidade de assentos.";
+    const loginArea = document.getElementById('loginArea');
+    const content = document.getElementById('content');
+    const userArea = document.getElementById('userArea');
+    const tblBody = document.querySelector('#tbl tbody');
+    const userEmail = document.getElementById('userEmail');
+    const loginMsg = document.getElementById('loginMsg');
+    const totalAssentosEl = document.getElementById('totalAssentos');
+
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        loginArea.classList.add('hidden');
+        content.classList.remove('hidden');
+        userArea.textContent = user.email;
+        userEmail.textContent = user.email;
+        loadRsvps();
+      } else {
+        loginArea.classList.remove('hidden');
+        content.classList.add('hidden');
+        userArea.textContent = '';
+        userEmail.textContent = '';
+      }
+    });
+
+    document.getElementById('btnLogin').addEventListener('click', async () => {
+      const email = document.getElementById('email').value;
+      const pwd = document.getElementById('pwd').value;
+      loginMsg.textContent = '';
+      try {
+        await signInWithEmailAndPassword(auth, email, pwd);
+      } catch (e) {
+        console.error(e);
+        loginMsg.textContent = 'Erro no login. Verifique usuário/senha.';
+      }
+    });
+
+    document.getElementById('btnLogout').addEventListener('click', () => signOut(auth));
+    document.getElementById('btnRefresh').addEventListener('click', loadRsvps);
+
+    async function loadRsvps(){
+      tblBody.innerHTML = '';
+      let total = 0;
+      try {
+        const q = query(collection(db, 'rsvps'), orderBy('confirmadoEm', 'desc'));
+        const snap = await getDocs(q);
+        if (snap.empty) {
+          tblBody.innerHTML = '<tr><td colspan="3">Nenhuma confirmação ainda.</td></tr>';
+          totalAssentosEl.textContent = "Total: 0 assentos";
           return;
         }
+        snap.forEach(doc => {
+          const data = doc.data();
+          const tr = document.createElement('tr');
+          const when = data.confirmadoEm ? data.confirmadoEm.toDate().toLocaleString() : '-';
+          const assentos = parseInt(data.assentos ?? data.acentos ?? 0);
+          total += isNaN(assentos) ? 0 : assentos;
+          tr.innerHTML = `
+            <td>${escapeHtml(data.nome || data.name || '')}</td>
+            <td>${escapeHtml(String(assentos || '-'))}</td>
+            <td class="time">${escapeHtml(when)}</td>
+          `;
+          tblBody.appendChild(tr);
+        });
+        totalAssentosEl.textContent = `Total: ${total} assento${total !== 1 ? 's' : ''}`;
+      } catch (e) {
+        console.error(e);
+      }
+    }
 
-        try {
-          await addDoc(collection(db, "rsvps"), {
-            nome,
-            assentos: parseInt(assentos),
-            confirmadoEm: serverTimestamp(),
-          });
-
-          msg.textContent = `Presença confirmada! Obrigada 💕`;
-          nomeInput.value = "";
-          assentosInput.value = "";
-
-          const texto = encodeURIComponent(
-            `Confirmei presença para os 15 anos da Sofia 💖\n\nNome: ${nome}\nAssentos: ${assentos}\n\nVenha também!`
-          );
-          whatsappLink.href = `https://wa.me/?text=${texto}`;
-        } catch (e) {
-          console.error(e);
-          msg.textContent = "Erro ao confirmar. Tente novamente.";
-        }
-      });
-    </script>
-  </body>
+    function escapeHtml(str){
+      return String(str).replace(/[&<>"']/g, s=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[s]));
+    }
+  </script>
+</body>
 </html>
