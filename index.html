@@ -54,6 +54,60 @@
       padding:28px;
       box-shadow:0 8px 24px rgba(139,31,63,.1);
       color:var(--wine);
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Confirme sua presença — Sofia 15 anos</title>
+
+  <!-- Fonte caligráfica -->
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;600&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#ff94ba;
+      --bg2:#ffe1eb;
+      --wine:#a31548;
+      --muted:#6d1f3a;
+      --card:#fff;
+      font-family:"Poppins","Segoe UI",Arial,sans-serif;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      background:linear-gradient(180deg,var(--bg),var(--bg2));
+      color:var(--muted);
+      -webkit-font-smoothing:antialiased;
+    }
+    .container{max-width:920px;margin:28px auto;padding:20px}
+    header{display:flex;align-items:center;gap:18px;margin-bottom:18px}
+
+    .logo{
+      width:100px;height:100px;border-radius:999px;
+      background:radial-gradient(circle at 25% 25%, #fff,#ffb6ce);
+      display:flex;align-items:center;justify-content:center;
+      box-shadow:0 6px 18px rgba(163,21,72,.15)
+    }
+    .logo h1{
+      font-family:'Dancing Script',cursive;
+      font-size:36px;
+      color:var(--wine);
+      margin:0;
+    }
+
+    h1.page-title{font-size:30px;margin:0;color:var(--wine)}
+    p.subtitle{margin:6px 0 0;color:rgba(90,16,48,.75)}
+
+    .phrases{
+      font-family:'Dancing Script',cursive;
+      font-size:22px;
+      text-align:center;
+      background:rgba(255,255,255,0.85);
+      border-radius:16px;
+      padding:28px;
+      box-shadow:0 8px 24px rgba(139,31,63,.1);
+      color:var(--wine);
       line-height:1.5;
       margin:20px 0;
     }
@@ -97,6 +151,23 @@
     .fade-in{animation:fadeIn .8s ease both}
     @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
     .whatsapp{display:inline-block;margin-top:12px;background:#25D366;color:#fff;padding:10px 16px;border-radius:9px;text-decoration:none}
+
+    /* Aviso animado */
+    .confirm-aviso{
+      background:rgba(255,255,255,0.85);
+      border:2px dashed rgba(163,21,72,0.3);
+      border-radius:10px;
+      padding:12px 16px;
+      margin-bottom:14px;
+      color:var(--wine);
+      font-weight:600;
+      text-align:center;
+      animation:pulse 2.8s ease-in-out infinite;
+    }
+    @keyframes pulse{
+      0%,100%{transform:scale(1);box-shadow:0 0 0 rgba(163,21,72,0);}
+      50%{transform:scale(1.02);box-shadow:0 0 14px rgba(163,21,72,0.25);}
+    }
   </style>
 </head>
 <body>
@@ -109,14 +180,12 @@
       </div>
     </header>
 
-    <!-- Frases bonitas -->
     <div class="phrases fade-in" id="phrases">
       <p>É muito mais do que a passagem do tempo...</p>
       <p>... uma adolescência que chega, uma festa, um brinde, e mais do que um dia!<br>São 15 Anos de vida. <strong>Você faz parte delas!</strong></p>
       <p><em>A festa é só uma noite, mas os bons momentos vividos nela serão inesquecíveis.</em></p>
     </div>
 
-    <!-- Cartão principal -->
     <div class="card fade-in" role="region" aria-label="Convite">
       <div style="font-size:20px;font-weight:600;color:var(--wine)">Sofia</div>
       <div style="font-size:15px;color:rgba(90,16,48,.8)">15 anos</div>
@@ -141,6 +210,10 @@
       <div class="heart" aria-hidden="true">❤</div>
 
       <div style="max-width:760px;margin:0 auto">
+        <div class="confirm-aviso">
+          💌 Por favor, confirme sua presença até <strong>10 de novembro de 2025</strong>.
+        </div>
+
         <div class="form-row">
           <input id="nome" type="text" placeholder="Digite seu nome completo" aria-label="Digite seu nome completo" />
           <input id="assentos" type="number" placeholder="Qtd. de assentos" min="1" aria-label="Quantidade de assentos" />
